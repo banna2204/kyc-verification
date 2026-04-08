@@ -1,40 +1,39 @@
 import mongoose from 'mongoose';
 
 const kycSchema = new mongoose.Schema({
-  email: {
-    type: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
     unique: true,
-    index: true,
   },
-  emailVerified: {
-    type: Boolean,
-    default: false,
-  },
-  fullName: {
-    type: String,
-    required: true,
-  },
-  otp: String,
-  otpExpiresAt: Date,
-  lastOtpSentAt: Date,
-  status: {
-    type: String,
-    enum: ['Pending', 'In Progress', 'Pending Verification', 'Approved', 'Rejected'],
-    default: 'Pending',
-  },
-  personalDetails: {
-    dob: Date,
-    gender: String,
-    address: String,
+  basicDetails: {
+    name: String,
+    lastName: String,
+    phone: String,
+    dob: String,
+    zip: String,
     city: String,
-    state: String,
-    pincode: String,
+    currency: String,
+    country: String,
   },
-  documents: {
-    aadhaarUrl: String,
+  documentType: {
+    type: String,
+    enum: ['digilocker', 'manual'],
+  },
+  documentData: {
+    digilockerId: String,
+    digilockerStatus: String,
+  },
+  files: {
+    idFrontUrl: String,
     panUrl: String,
     selfieUrl: String,
+  },
+  verificationStatus: {
+    type: String,
+    enum: ['Pending', 'Submitted', 'In Progress', 'Verified', 'Rejected'],
+    default: 'Pending',
   },
   timelineEvents: [
     {
@@ -43,6 +42,6 @@ const kycSchema = new mongoose.Schema({
       timestamp: { type: Date, default: Date.now },
     }
   ],
-},{ timestamps: true });
+}, { timestamps: true });
 
 export default mongoose.model('KYC', kycSchema);

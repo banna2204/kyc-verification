@@ -1,34 +1,42 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { KYCProvider } from './context/KYCContext';
-import { Layout } from './components/Layout/Layout';
-import { LandingPage } from './pages/LandingPage';
-import { EmailVerification } from './pages/EmailVerification';
-import { PersonalDetails } from './pages/PersonalDetails';
-import { DocumentUpload } from './pages/DocumentUpload';
-import { VerificationMock } from './pages/VerificationMock';
-import { SummaryPreview } from './pages/SummaryPreview';
-import { StatusDashboard } from './pages/StatusDashboard';
+import { BrowserRouter, Route, Routes } from 'react-router'
+import './App.css'
+import DigiLockerConnect from './components/digiLocker/DigiLockerConnect'
+import KycTrustBlock from './components/KYCTrustBlock'
+import LandingPage from './components/LandingPage'
+import NavBar from './components/NavBar'
+import SecurityStep from './components/SecurityStep'
+import Footer from './components/footer/Footer'
+import KycVerification from './kycflow/KYCVerification'
+import AdminPanel from './components/admin/AdminPanel'
+import AdminLogin from './components/admin/AdminLogin'
+import ProtectedRoute from './components/admin/ProtectedRoute'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
     <BrowserRouter>
-      <KYCProvider>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<LandingPage />} />
-            <Route path="email-verification" element={<EmailVerification />} />
-            <Route path="personal-details" element={<PersonalDetails />} />
-            <Route path="document-upload" element={<DocumentUpload />} />
-            <Route path="verification" element={<VerificationMock />} />
-            <Route path="summary" element={<SummaryPreview />} />
-            <Route path="status" element={<StatusDashboard />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-        </Routes>
-      </KYCProvider>
+      <Toaster position="top-right" />
+      <Routes>
+        <Route path="/" element={
+          <>
+            <div className='bg-[#9ee86f]'>
+              <NavBar />
+              <LandingPage />
+            </div>
+            <KycTrustBlock />
+            <SecurityStep />
+            <DigiLockerConnect />
+          </>
+        } />
+
+        <Route path="/kyc" element={<KycVerification/>} />
+        <Route path="/admin-login" element={<AdminLogin/>} />
+        <Route path="/admin" element={<ProtectedRoute><AdminPanel/></ProtectedRoute>} />
+
+      </Routes>
+      <Footer/>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App

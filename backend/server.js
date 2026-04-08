@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import kycRoutes from './routes/kycRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import documentRoutes from './routes/documentRoutes.js';
 
 dotenv.config();
 
@@ -13,26 +15,25 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Database Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/kyc-verification')
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// Routes
 app.get('/', (req, res) => {
   res.send("Hello World");
 })
+app.use('/api/auth', authRoutes);
 app.use('/api/kyc', kycRoutes);
+app.use('/api/documents', documentRoutes);
 
-// Error Handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!', error: err.message });

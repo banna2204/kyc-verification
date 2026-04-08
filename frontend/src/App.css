@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+.hero-text {
+  font-family: "Wise Sans", sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em; /* Tight kerning is key */
+  line-height: 0.95; /* Tight leading for the stacked look */
+  color: #003300; /* Dark forest green */
+}
